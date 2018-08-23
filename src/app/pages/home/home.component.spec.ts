@@ -22,4 +22,40 @@ describe('HomeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('addRectangle should add a rectangle into canvas and return true', () => {
+    expect(component.addRectangle()).toBeTruthy();
+  })
+
+  it('newRectangle should create a rectangle', () => {
+    expect(component.newRectangle()).not.toBeNull();
+  })
+
+  it('should have a canvas', () => {
+    expect(component.canvas).not.toBeNull();
+  })
+
+  it('newCircle should creates new circle', ()=> {
+    expect(component.newCircle()).not.toBeNull()
+  })
+
+  it('addCircle should add a circle into canvas and return true', () => {
+    expect(component.addCircle()).toBeTruthy()
+  })
+
+  it('newLine should creates new line', () => {
+    expect(component.newLine()).not.toBeNull()
+  })
+
+  it('addLine should add a line into canvas', () => {
+    expect(component.addLine()).toBeTruthy()
+  })
+
+  it('newText should create a new text', ()=> {
+    expect(component.newText()).not.toBeNull()
+  })
+
+  it('addText should add a text into canvas', () => {
+    expect(component.addText()).toBeTruthy()
+  })
 });

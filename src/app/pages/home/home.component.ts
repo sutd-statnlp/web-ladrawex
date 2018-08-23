@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
+import { DrawexService } from 'src/app/core';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +9,9 @@ import { fabric } from 'fabric';
 })
 export class HomeComponent implements OnInit {
   canvas: fabric.Canvas
-  constructor() {
+  latex: string;
+  constructor(private drawexService: DrawexService) {
+    this.latex = ''
   }
 
   ngOnInit() {
@@ -29,23 +32,26 @@ export class HomeComponent implements OnInit {
       left: 100,
       width: 40,
       height: 40,
-      fill : '#000000',
-      lockRotation: true
+      fill: '#FFFFFF',
+      lockRotation: true,
+      stroke: '#000000',
+      strokeWidth: 1
     });
   }
 
   newCircle(): fabric.Circle {
     return new fabric.Circle({
-      top: 10,
+      top: 40,
       left: 10,
       radius: 20,
-      fill : '#000000',
-      lockRotation: true
+      fill: '#FFFFFF',
+      lockRotation: true,
+      stroke: '#000000',
+      strokeWidth: 1
     });
   }
 
-  addCircle(): boolean{
-    console.log('add circle')
+  addCircle(): boolean {
     let circle = this.newCircle()
     return this.canvas.add(circle) != null;
   }
@@ -54,7 +60,6 @@ export class HomeComponent implements OnInit {
     return new fabric.Line([50, 50, 200, 50], {
       top: 10,
       left: 10,
-      fill : '#000000',
       strokeWidth: 2,
       stroke: '#000000',
       hasControls: true,
@@ -71,7 +76,7 @@ export class HomeComponent implements OnInit {
     return new fabric.IText('text', {
       top: 20,
       left: 20,
-      fill : '#000000',
+      fill: '#000000',
       lockRotation: true,
       fontSize: 20
     });
@@ -80,5 +85,17 @@ export class HomeComponent implements OnInit {
   addText(): boolean {
     let text = this.newText()
     return this.canvas.add(text) != null;
+  }
+
+  exportLatex(): boolean {
+    let objects = this.canvas.getObjects()
+    this.drawexService.getLatexDoc(objects).subscribe((doc) => {
+      this.latex = doc;
+    })
+    return true;
+  }
+
+  clearDrawing(): boolean {
+    return this.canvas.clear() != null;
   }
 }

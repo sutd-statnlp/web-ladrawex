@@ -1,9 +1,21 @@
-<div>
-  <button (click)="addRectangle()">Add Rectangle</button>
-  <button (click)="addCircle()">Add Circle</button>
-  <button (click)="addLine()">Add Line</button>
-  <button (click)="addText()">Add Text</button>
-</div>
-<div>
-  <canvas id="canvas" width="400" height="400" border="1"></canvas>
+<div class="container pt-2">
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-primary btn-raised mr-1" (click)="addRectangle()">Add Rectangle</button>
+      <button class="btn btn-primary  btn-raised mr-1" (click)="addCircle()">Add Circle</button>
+      <button class="btn btn-primary  btn-raised mr-1" (click)="addLine()">Add Line</button>
+      <button class="btn btn-primary  btn-raised mr-1" (click)="addText()">Add Text</button>
+      <button class="btn btn-secondary  btn-raised mr-1" (click)="clearDrawing()">Clear</button>
+      <button class="btn btn-success  btn-raised mr-1" (click)="exportLatex()">Export Latex</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <canvas id="canvas" width="500" height="400" border="1"></canvas>
+    </div>
+    <div class="col-6">
+      <textarea name="latex" [(ngModel)]="latex" id="latex" cols="60" rows="16"></textarea>
+    </div>
+  </div>
+
 </div>

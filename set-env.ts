@@ -11,6 +11,7 @@ const envConfigFile = `
 export const environment = {
   production: ${isProd},
   debugInfoEnabled: false,
+  apiUrl: "${isProd ? process.env.API_URL : 'http://localhost:9000/api/draw'}",
 };
 `
 fs.writeFile(targetPath, envConfigFile, function (err) {

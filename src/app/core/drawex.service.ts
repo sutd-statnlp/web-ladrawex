@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { fabric } from 'fabric';
+import { HttpClient } from '@angular/common/http';
+import { API_URL, HTTP_OPTIONS } from '../app.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DrawexService {
+  constructor(private http: HttpClient) { }
   getRequestText(text: fabric.IText): any {
     return {
       common: this.getRequestCommon(text)
@@ -42,8 +45,8 @@ export class DrawexService {
         height: component.height * component.scaleX,
       },
       position: {
-        x: component.left,
-        y: component.top
+        x: component.left / 10,
+        y: component.top / 10,
       },
       text: {
         content: component.text
@@ -56,9 +59,9 @@ export class DrawexService {
     }
   }
   getLatexDoc(objects: any[]): Observable<string> {
-    let getRequestBody = this.getRequestBody(objects)
-    console.log(getRequestBody)
-    return of(`\documentclass{article}\end{document}`)
+    let body = this.getRequestBody(objects)
+    console.log(JSON.stringify(body))
+    return this.http.post<string>(API_URL, body);
   }
   getRequestBody(objects: any[]): any {
     let getRequestBody = {

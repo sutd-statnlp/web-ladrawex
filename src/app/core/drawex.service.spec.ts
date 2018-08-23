@@ -3,12 +3,14 @@ import { TestBed, inject } from '@angular/core/testing';
 import { fabric } from 'fabric';
 
 import { DrawexService } from './drawex.service';
+import { FakeShareModule } from 'test';
 
 describe('DrawexService', () => {
   let fakeObjects = [new fabric.Rect(),new fabric.Rect(),new fabric.Line(),new fabric.IText('text'),new fabric.Circle()]
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [FakeShareModule],
       providers: [DrawexService]
     });
   });

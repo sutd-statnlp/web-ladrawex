@@ -35,7 +35,10 @@ export class HomeComponent implements OnInit {
       fill: '#FFFFFF',
       lockRotation: true,
       stroke: '#000000',
-      strokeWidth: 1
+      strokeWidth: 1,
+      hasRotatingPoint: false,
+      lockScalingX: true,
+      lockScalingY: true
     });
   }
 
@@ -47,7 +50,10 @@ export class HomeComponent implements OnInit {
       fill: '#FFFFFF',
       lockRotation: true,
       stroke: '#000000',
-      strokeWidth: 1
+      strokeWidth: 1,
+      hasRotatingPoint: false,
+      lockScalingX: true,
+      lockScalingY: true
     });
   }
 
@@ -57,13 +63,15 @@ export class HomeComponent implements OnInit {
   }
 
   newLine(): fabric.Line {
-    return new fabric.Line([50, 50, 200, 50], {
+    return new fabric.Line([50, 50, 100, 50], {
       top: 10,
       left: 10,
       strokeWidth: 2,
       stroke: '#000000',
       hasControls: true,
-      hasRotatingPoint: true,
+      hasRotatingPoint: false,
+      lockScalingX: true,
+      lockScalingY: true
     });
   }
 
@@ -76,9 +84,11 @@ export class HomeComponent implements OnInit {
     return new fabric.IText('text', {
       top: 20,
       left: 20,
-      fill: '#000000',
-      lockRotation: true,
-      fontSize: 20
+      nonBackground: true,
+      hasRotatingPoint: false,
+      fontSize: 20,
+      lockScalingX: true,
+      lockScalingY: true
     });
   }
 

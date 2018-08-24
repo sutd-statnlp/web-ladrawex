@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { fabric } from 'fabric';
 import { HttpClient } from '@angular/common/http';
-import { API_URL, HTTP_OPTIONS } from '../app.constants';
+import { API_URL } from '../app.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +23,9 @@ export class DrawexService {
     }
   }
   getRequestLine(line: fabric.Line): any {
-    console.log(line)
     let positionPortion = this.canvas.positionPortion * 20
     return {
-      color: line.stroke,
+      color: this.convertHexToRgb(line.stroke),
       width: line.strokeWidth / this.canvas.thickPortion,
       startPosition: {
         x: line.x1 * line.left / positionPortion,
@@ -44,13 +42,24 @@ export class DrawexService {
       common: this.getRequestCommon(circle)
     }
   }
+  convertHexToRgb(hex: string): any {
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (result) {
+      return {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      }
+    }
+    return null
+  }
   getRequestCommon(component: any): any {
     return {
       border: {
-        color: component.stroke,
+        color: component.stroke ? this.convertHexToRgb(component.stroke) : this.convertHexToRgb('#FFFFFF'),
         thick: component.strokeWidth / this.canvas.thickPortion,
       },
-      backgroundColor: component.fill,
+      backgroundColor: component.nonBackground ? this.convertHexToRgb('#FFFFFF') : this.convertHexToRgb(component.fill),
       size: {
         width: component.width / this.canvas.sizePortion,
         height: component.height / this.canvas.sizePortion,
@@ -74,7 +83,7 @@ export class DrawexService {
     return this.http.post<string>(API_URL, body).toPromise();
   }
   getRequestBody(objects: any[]): any {
-    let getRequestBody = {
+    let requestBody = {
       rectangles: [],
       circles: [],
       lines: [],
@@ -84,24 +93,27 @@ export class DrawexService {
       switch (true) {
         case item instanceof fabric.Rect:
           let rect = this.getRequestRect(item)
-          getRequestBody.rectangles.push(rect)
+          requestBody.rectangles.push(rect)
           break;
         case item instanceof fabric.Circle:
           let circle = this.getRequestCircle(item)
-          getRequestBody.circles.push(circle)
+          requestBody.circles.push(circle)
           break
         case item instanceof fabric.Line:
           let line = this.getRequestLine(item)
-          getRequestBody.lines.push(line)
+          requestBody.lines.push(line)
           break
         case item instanceof fabric.IText:
           let text = this.getRequestText(item)
-          getRequestBody.texts.push(text)
+          requestBody.texts.push(text)
           break
         default:
           break;
       }
     });
-    return getRequestBody
+    return requestBody
+  }
+  getCanvas(): any {
+    return this.canvas
   }
 }

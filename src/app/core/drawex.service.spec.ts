@@ -20,7 +20,7 @@ describe('DrawexService', () => {
   }));
 
   it('getLatexDoc should return latex document as string from given objects', inject([DrawexService], (service: DrawexService) => {
-    service.getLatexDoc(fakeObjects).subscribe((doc) => {
+    service.getLatexDoc(fakeObjects).then((doc) => {
       expect(doc).not.toBeNull();
       expect(doc.length).toBeGreaterThan(0);
     });
@@ -60,4 +60,25 @@ describe('DrawexService', () => {
     expect(text).not.toBeNull();
   }))
 
+  it('convertHexToRgb should convert hex string into rgb values', inject([DrawexService], (service: DrawexService) => {
+    let rgb = service.convertHexToRgb('#000000')
+    expect(rgb).not.toBeNull()
+    expect(rgb.r).toEqual(0)
+    expect(rgb.g).toEqual(0)
+    expect(rgb.b).toEqual(0)
+
+    rgb = service.convertHexToRgb('#FFFFFF')
+    expect(rgb).not.toBeNull()
+    expect(rgb.r).toEqual(255)
+    expect(rgb.g).toEqual(255)
+    expect(rgb.b).toEqual(255)
+
+    rgb = service.convertHexToRgb('FFF')
+    expect(rgb).toBeNull()
+  }))
+
+  it('getCanvas returns the canvas',  inject([DrawexService], (service: DrawexService) => {
+    let canvas = service.getCanvas()
+    expect(canvas).not.toBeNull()
+  }))
 });

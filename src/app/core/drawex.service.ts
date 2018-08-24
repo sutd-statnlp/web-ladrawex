@@ -8,23 +8,34 @@ import { API_URL, HTTP_OPTIONS } from '../app.constants';
   providedIn: 'root'
 })
 export class DrawexService {
-  constructor(private http: HttpClient) { }
+  canvas: any
+  constructor(private http: HttpClient) {
+    this.canvas = {
+      width: 400,
+      height: 400,
+      positionPortion: 30,
+      sizePortion: 4,
+      thickPortion: 2,
+    }
+  }
   getRequestText(text: fabric.IText): any {
     return {
       common: this.getRequestCommon(text)
     }
   }
   getRequestLine(line: fabric.Line): any {
+    console.log(line)
+    let positionPortion = this.canvas.positionPortion * 20
     return {
       color: line.stroke,
-      width: line.strokeWidth * line.scaleY,
+      width: line.strokeWidth / this.canvas.thickPortion,
       startPosition: {
-        x: line.x1 * line.left * line.scaleX,
-        y: line.y1 * line.top,
+        x: line.x1 * line.left / positionPortion,
+        y: line.y1 * (this.canvas.width - line.top) / positionPortion,
       },
       endPosition: {
-        x: line.x2 * line.left * line.scaleX,
-        y: line.y2 * line.top,
+        x: line.x2 * line.left / positionPortion,
+        y: line.y2 * (this.canvas.width - line.top) / positionPortion,
       }
     }
   }
@@ -37,16 +48,16 @@ export class DrawexService {
     return {
       border: {
         color: component.stroke,
-        thick: component.strokeWidth,
+        thick: component.strokeWidth / this.canvas.thickPortion,
       },
       backgroundColor: component.fill,
       size: {
-        width: component.width * component.scaleX,
-        height: component.height * component.scaleX,
+        width: component.width / this.canvas.sizePortion,
+        height: component.height / this.canvas.sizePortion,
       },
       position: {
-        x: component.left / 10,
-        y: component.top / 10,
+        x: component.left / this.canvas.positionPortion,
+        y: (this.canvas.width - component.top) / this.canvas.positionPortion,
       },
       text: {
         content: component.text
@@ -58,10 +69,9 @@ export class DrawexService {
       common: this.getRequestCommon(rect)
     }
   }
-  getLatexDoc(objects: any[]): Observable<string> {
+  getLatexDoc(objects: any[]): Promise<string> {
     let body = this.getRequestBody(objects)
-    console.log(JSON.stringify(body))
-    return this.http.post<string>(API_URL, body);
+    return this.http.post<string>(API_URL, body).toPromise();
   }
   getRequestBody(objects: any[]): any {
     let getRequestBody = {

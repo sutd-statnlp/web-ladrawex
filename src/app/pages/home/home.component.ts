@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit {
 
   exportLatex(): boolean {
     let objects = this.canvas.getObjects()
-    this.drawexService.getLatexDoc(objects).subscribe((doc) => {
+    this.drawexService.getLatexDoc(objects).then((doc) => {
       this.latex = doc;
     })
     return true;
